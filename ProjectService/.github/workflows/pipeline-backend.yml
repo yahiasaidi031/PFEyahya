@@ -1,0 +1,19 @@
+name: CI/CD service Backend
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  #build-docker-image
+  CI:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build -t project-img:${{ github.sha }} .
+      - name: Verify image build
+        run: docker images
+     # - name: Tag image for latest deployment (optional)
+       # run: docker tag project-img:${{ github.sha }} project
