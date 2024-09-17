@@ -1,0 +1,47 @@
+version: '2.2'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.11.2-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  # Service MongoDB
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # Service Backend Node.js
+  backend: 
+    image: yahya184/project-img:latest
+    container_name: backend
+    ports:
+      - "8006:8006"
+    environment:
+      - APP_SECRET=jg_youtube_tutorial
+      - MONGODB_URI=mongodb://mongo:27017/db_project
+      - PORT=8006
+      - MESSAGE_BROKER_URL=amqp://rabbitmq
+      - PROJECT_SERVICE_URL=http://backend:8006
+      - MESSAGE_BROKER_URL=amqp://rabbitmq:5672
+    depends_on:
+      - rabbitmq
+   
+      
+
+  # Service Frontend Angular
+  frontend: 
+    image: yahya184/frontoff-img:latest
+    container_name: frontoff
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+    driver: local
