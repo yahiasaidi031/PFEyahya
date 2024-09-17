@@ -1,0 +1,17 @@
+name: Deploy Docker-Compose Application
+
+on:
+  push:
+    branches: [frontOff, projectService, main]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Run Docker-Compose
+        run: |
+          docker-compose up -d
