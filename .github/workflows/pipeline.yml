@@ -16,7 +16,7 @@ jobs:
       - name: Verify image build
         run: docker images
       - name: Tag image for latest deployment (optional)
-        run: docker tag project-img:${{ github.sha }} project
+        run: docker tag project-img:${{ github.sha }} yahya184/project-img
 # push-to-dockerhub:
   CD: 
     runs-on: self-hosted
