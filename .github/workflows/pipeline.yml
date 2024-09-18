@@ -2,7 +2,7 @@ name: CI/CD for Angular Front-End
 
 on:
   push:
-    branches: [ frontOff ]
+    branches: [ front ]
 
 jobs:
  
@@ -16,11 +16,11 @@ jobs:
      
      
       - name: Build Docker image
-        run: docker build -t frontoff-img:${{ github.sha }} .
+        run: docker build -t front-img:${{ github.sha }} .
       - name: Verify image build
         run: docker images
       - name: Tag image for latest deployment (optional)
-        run: docker tag yahya184/frontoff-img:${{ github.sha }} yahya184/frontoff-img:latest
+        run: docker tag yahya184/front-img:${{ github.sha }} yahya184/front-img:latest
 
  
   CD: 
