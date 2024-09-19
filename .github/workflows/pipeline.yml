@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Forcer Git à utiliser HTTP/1.1
         run: git config --global http.version HTTP/1.1
@@ -26,6 +26,9 @@ jobs:
           for i in {1..3}; do
             git fetch origin +refs/heads/front:refs/remotes/origin/front && break || { echo "Tentative $i échouée, attente de 30s"; sleep 30; }
           done
+
+      - name: Clean Git repository
+        run: git reset --hard HEAD
 
       - name: Build Docker image
         run: docker build -t yahya184/front-img:${{ github.sha }} .
@@ -55,13 +58,3 @@ jobs:
       - name: Deploy application
         run: |
           ssh user@server 'docker pull yahya184/front-img:latest && docker-compose up -d'
-
-  # Ajout du dernier modèle
-  last_model:
-    runs-on: self-hosted
-    needs: CD
-
-    steps:
-      - name: Pull latest changes and run last model
-        run: |
-          ssh user@server 'cd /path/to/your/app && git pull origin front && ./run_last_model_script.sh'
