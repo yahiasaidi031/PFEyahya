@@ -2,7 +2,7 @@ name: CI/CD for Angular Front-End
 
 on:
   push:
-    branches: [ front ]
+    branches: [ front ] 
 
 jobs:
  
