@@ -1,14 +1,16 @@
 
 
+# Étape de construction
 FROM node:18 as builder
 WORKDIR /app
-COPY . .
+COPY package.json package-lock.json ./
 RUN npm install -g @angular/cli
 RUN npm install --force
-RUN ng build
+COPY . .
+RUN ng build --prod
 
+# Étape de production
 FROM nginx:alpine
-RUN rm /etc/nginx/conf.d/default.conf
 COPY default.conf /etc/nginx/conf.d/
 COPY --from=builder /app/dist/front_app/browser /usr/share/nginx/html/
 EXPOSE 80
