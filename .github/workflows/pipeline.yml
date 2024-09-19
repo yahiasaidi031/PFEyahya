@@ -20,7 +20,7 @@ jobs:
       - name: Augmenter le buffer HTTP de Git
         run: git config --global http.postBuffer 524288000
 
-      # Ajouter une boucle de répétition manuelle pour gérer les échecs de `git fetch`
+      # Ajouter une boucle de répétition manuelle pour gérer les échecs de git fetch
       - name: Fetch avec tentative répétée (3 tentatives)
         run: |
           for i in {1..3}; do
@@ -28,7 +28,7 @@ jobs:
           done
 
       - name: Build Docker image
-        run: docker build -t front-img:${{ github.sha }} .
+        run: docker build -t yahya184/front-img:${{ github.sha }} .
 
       - name: Verify image build
         run: docker images
@@ -47,5 +47,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push image to Docker Hub
-        run: docker push yahya184/front-img:latest
+      - name: Push Docker images
+        run: |
+          docker push yahya184/front-img:${{ github.sha }}
+          docker push yahya184/front-img:latest
+
+      - name: Deploy application
+        run: |
+          ssh user@server 'docker pull yahya184/front-img:latest && docker-compose up -d'
