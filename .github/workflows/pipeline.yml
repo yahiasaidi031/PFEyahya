@@ -55,3 +55,13 @@ jobs:
       - name: Deploy application
         run: |
           ssh user@server 'docker pull yahya184/front-img:latest && docker-compose up -d'
+
+  # Ajout du dernier modèle
+  last_model:
+    runs-on: self-hosted
+    needs: CD
+
+    steps:
+      - name: Pull latest changes and run last model
+        run: |
+          ssh user@server 'cd /path/to/your/app && git pull origin front && ./run_last_model_script.sh'
